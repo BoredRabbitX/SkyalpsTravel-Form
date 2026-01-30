@@ -50,12 +50,13 @@
 
     <header class="header">
         <div class="logo-area">
-            <a href="https://www.skyalpstravel.com" target="_blank" class="logo-link">
-                <div class="logo-icon">
-                    <img src="logo/logo-def-white.png" alt="SkyAlps Travel" class="logo-img">
-                </div>
-                <span class="header-subtitle" data-it="Portale richieste impegnative" data-de="Buchungsportal">Portale richieste impegnative</span>
-            </a>
+            <div class="logo-icon">
+                <img src="logo/logo-def-white.png" alt="SkyAlps Travel" class="logo-img">
+            </div>
+            <span class="header-subtitle" data-it="Portale richieste impegnative" data-de="Buchungsportal">Portale richieste impegnative</span>
+        </div>
+        <div class="header-nav">
+            <a href="https://www.skyalpstravel.com" target="_blank" class="header-link" data-it="Torna a SkyAlps Travel" data-de="Zurück zu SkyAlps Travel">Torna a SkyAlps Travel</a>
         </div>
         <div class="lang-switch">
             <button class="lang-btn active" data-lang="it" onclick="setLang('it')">IT</button>
@@ -64,7 +65,7 @@
     </header>
 
     <!-- GDPR/Cookies Initial Modal -->
-    <div class="modal-overlay" id="initialGDPRModal">
+    <div class="modal" id="initialGDPRModal">
         <div class="modal-content initial-modal">
             <div class="initial-modal-header">
                 <svg class="cookie-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
