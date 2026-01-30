@@ -175,16 +175,28 @@
                 document.getElementById('secondAdultCard').classList.remove('hidden');
                 document.getElementById('secondAdultCard').classList.add('expanded');
                 document.getElementById('addAdult').classList.add('hidden');
+                // Rendi obbligatori i campi del secondo adulto
+                document.getElementById('secondAdultCard').querySelectorAll('input').forEach(function(input) {
+                    input.setAttribute('required', 'required');
+                });
             }
             
             if (data._thirdAdult) {
                 document.getElementById('thirdAdultCard').classList.remove('hidden');
                 document.getElementById('thirdAdultCard').classList.add('expanded');
+                // Rendi obbligatori i campi del terzo adulto
+                document.getElementById('thirdAdultCard').querySelectorAll('input').forEach(function(input) {
+                    input.setAttribute('required', 'required');
+                });
             }
             
             if (data._fourthAdult) {
                 document.getElementById('fourthAdultCard').classList.remove('hidden');
                 document.getElementById('fourthAdultCard').classList.add('expanded');
+                // Rendi obbligatori i campi del quarto adulto
+                document.getElementById('fourthAdultCard').querySelectorAll('input').forEach(function(input) {
+                    input.setAttribute('required', 'required');
+                });
             }
             
             if (data._sendMethod) {
@@ -532,6 +544,11 @@
                     cardEl.classList.add('expanded');
                     adultCount++;
                     
+                    // Rendi obbligatori i campi del nuovo adulto
+                    cardEl.querySelectorAll('input').forEach(function(input) {
+                        input.setAttribute('required', 'required');
+                    });
+                    
                     // Hide add button if max reached
                     if (adultCount >= 4) {
                         this.style.display = 'none';
@@ -551,8 +568,9 @@
                     if (cardEl) {
                         cardEl.classList.add('hidden');
                         cardEl.classList.remove('expanded');
-                        // Clear inputs
+                        // Rendi non obbligatori i campi prima di pulirli
                         cardEl.querySelectorAll('input').forEach(function(input) {
+                            input.removeAttribute('required');
                             input.value = '';
                         });
                     }
@@ -788,6 +806,13 @@
             // Sincronizza campi dinamici con campi nascosti
             syncDynamicFields();
             
+            // Controlla la privacy manualmente
+            var privacyCheckbox = document.getElementById('privacyCheckbox');
+            if (!privacyCheckbox || !privacyCheckbox.checked) {
+                showError(t[currentLang].required);
+                return;
+            }
+            
             if (!validate(5)) {
                 showError(t[currentLang].required);
                 return;
@@ -921,28 +946,46 @@
         var bambini = children;
         var neonati = infants;
         
-        var message = 'NUOVA RICHIESTA\n';
+        var message = '*NUOVA RICHIESTA*\n';
         message += 'Pratica: ' + num + '\n\n';
-        message += 'CLIENTE\n';
+        message += '*CLIENTE*\n';
         message += nome + ' ' + cognome + '\n';
         message += (d['entry.TELEFONO'] || '-') + '\n';
         message += (d['entry.EMAIL'] || '-') + '\n\n';
-        message += 'VIAGGIO\n';
+        message += '*VIAGGIO*\n';
         message += dest + '\n';
-        message += (d['entry.DATA_PARTENZA'] || '-') + ' - ' + (d['entry.DATA_RITORNO'] || '-') + '\n';
-        message += (d['entry.NOTTI'] || '-') + ' notti\n\n';
-        message += 'VIAGGIATORI\n';
+        message += 'Partenza: ' + (d['entry.DATA_PARTENZA'] || '-') + '\n';
+        message += 'Ritorno: ' + (d['entry.DATA_RITORNO'] || '-') + '\n';
+        message += 'Notti: ' + (d['entry.NOTTI'] || '-') + '\n\n';
+        message += '*VIAGGIATORI*\n';
         message += adulti + ' adulti';
         if (bambini > 0) message += ', ' + bambini + ' bambini';
         if (neonati > 0) message += ', ' + neonati + ' neonati';
         message += '\n';
         
         if (d['entry.MESSAGGIO']) {
-            message += '\nNOTE: ' + d['entry.MESSAGGIO'];
+            message += '\n*NOTE*\n' + d['entry.MESSAGGIO'];
         }
         
         return encodeURIComponent(message);
     }
+
+    // ============================================
+    // GDPR MODAL
+    // ============================================
+    window.showGDPRModal = function() {
+        showModal('gdprModal');
+    };
+
+    window.acceptGDPR = function() {
+        var checkbox = document.getElementById('privacyCheckbox');
+        if (checkbox) {
+            checkbox.checked = true;
+            checkbox.classList.add('valid');
+        }
+        hideModal('gdprModal');
+        saveData();
+    };
 
     function sendWhatsApp(message) {
         var waUrl = 'https://wa.me/' + CONFIG.WHATSAPP_NUM + '?text=' + message;

@@ -602,9 +602,10 @@
                         
                         <div class="privacy-section">
                             <label class="privacy-check-compact">
-                                <input type="checkbox" name="entry.PRIVACY" required>
+                                <input type="checkbox" name="entry.PRIVACY" id="privacyCheckbox">
                                 <span class="check-box"></span>
                                 <span class="privacy-text" data-it="Ho letto e accetto la privacy policy *" data-de="Ich habe die Datenschutzerklärung gelesen und akzeptiere sie *">Ho letto e accetto la privacy policy *</span>
+                                <a href="#" class="privacy-link" onclick="showGDPRModal(); return false;" data-it="(leggi l'informativa completa)" data-de="">(lesen Sie die vollständige Erklärung)</a>
                             </label>
                         </div>
                         
@@ -688,6 +689,29 @@
             <div class="modal-actions">
                 <button class="btn-modal secondary" onclick="closeModal('errorModal')">
                     <span data-it="Chiudi" data-de="Schließen">Chiudi</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GDPR Modal -->
+    <div class="modal" id="gdprModal">
+        <div class="modal-content">
+            <h3 class="modal-title" data-it="Informativa Privacy" data-de="Datenschutzerklärung">Informativa Privacy</h3>
+            <div class="gdpr-text">
+                <p data-it="Gentile Utente, ai sensi del Regolamento (UE) 2016/679 (GDPR) e della normativa vigente in materia di protezione dei dati personali, La informiamo che:" data-de="Sehr geehrter Nutzer, gemäß der Verordnung (EU) 2016/679 (DSGVO) und der geltenden Datenschutzgesetze informieren wir Sie, dass:">Gentile Utente, ai sensi del Regolamento (UE) 2016/679 (GDPR) e della normativa vigente in materia di protezione dei dati personali, La informiamo che:</p>
+                <ul>
+                    <li data-it="Il Titolare del trattamento è SkyAlps Travel, con sede legale in Italia." data-de="Der Verantwortliche für die Verarbeitung ist SkyAlps Travel mit Sitz in Italien.">Il Titolare del trattamento è SkyAlps Travel, con sede legale in Italia.</li>
+                    <li data-it="I dati personali forniti (nome, cognome, email, telefono, data di nascita) saranno trattati per la gestione della sua richiesta di preventivo." data-de="Die von Ihnen angegebenen persönlichen Daten (Name, Vorname, E-Mail, Telefon, Geburtsdatum) werden zur Bearbeitung Ihrer Angebotanfrage verarbeitet.">I dati personali forniti (nome, cognome, email, telefono, data di nascita) saranno trattati per la gestione della sua richiesta di preventivo.</li>
+                    <li data-it="Il trattamento è necessario per l'esecuzione di misure precontrattuali adottate su richiesta dell'interessato." data-de="Die Verarbeitung ist für die Durchführung vorvertraglicher Maßnahmen erforderlich, die auf Anfrage der betroffenen Person ergriffen werden.">Il trattamento è necessario per l'esecuzione di misure precontrattuali adottate su richiesta dell'interessato.</li>
+                    <li data-it="I dati non saranno ceduti a terzi e saranno conservati per il tempo necessario alla gestione della richiesta." data-de="Die Daten werden nicht an Dritte weitergegeben und werden für die erforderliche Dauer der Bearbeitung Ihrer Anfrage gespeichert.">I dati non saranno ceduti a terzi e saranno conservati per il tempo necessario alla gestione della richiesta.</li>
+                    <li data-it="L'interessato ha diritto di accedere, rectificare, cancellare i propri dati, nonché di esercitare il diritto alla portabilità." data-de="Sie haben das Recht auf Auskunft, Berichtigung, Löschung Ihrer Daten sowie das Recht auf Datenübertragbarkeit.">L'interessato ha diritto di accedere, rectificare, cancellare i propri dati, nonché di esercitare il diritto alla portabilità.</li>
+                    <li data-it="Per esercitare i propri diritti, può contattare: info@skyalpstravel.com" data-de="Um Ihre Rechte auszuüben, können Sie uns unter folgender E-Mail-Adresse kontaktieren: info@skyalpstravel.com">Per esercitare i propri diritti, può contattare: info@skyalpstravel.com</li>
+                </ul>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal secondary" onclick="acceptGDPR()">
+                    <span data-it="Ho letto e accetto" data-de="Gelesen und akzeptiert">Ho letto e accetto</span>
                 </button>
             </div>
         </div>
