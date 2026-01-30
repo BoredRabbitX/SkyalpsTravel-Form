@@ -50,16 +50,44 @@
 
     <header class="header">
         <div class="logo-area">
-            <div class="logo-icon">
-                <img src="logo/logo-def-white.png" alt="SkyAlps Travel" class="logo-img">
-            </div>
-            <span class="header-subtitle" data-it="Portale richieste impegnative" data-de="Buchungsportal">Portale richieste impegnative</span>
+            <a href="https://www.skyalpstravel.com" target="_blank" class="logo-link">
+                <div class="logo-icon">
+                    <img src="logo/logo-def-white.png" alt="SkyAlps Travel" class="logo-img">
+                </div>
+                <span class="header-subtitle" data-it="Portale richieste impegnative" data-de="Buchungsportal">Portale richieste impegnative</span>
+            </a>
         </div>
         <div class="lang-switch">
             <button class="lang-btn active" data-lang="it" onclick="setLang('it')">IT</button>
             <button class="lang-btn" data-lang="de" onclick="setLang('de')">DE</button>
         </div>
     </header>
+
+    <!-- GDPR/Cookies Initial Modal -->
+    <div class="modal-overlay" id="initialGDPRModal">
+        <div class="modal-content initial-modal">
+            <div class="initial-modal-header">
+                <svg class="cookie-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <circle cx="8" cy="9" r="1" fill="currentColor"/>
+                    <circle cx="15" cy="8" r="1" fill="currentColor"/>
+                    <circle cx="10" cy="14" r="1" fill="currentColor"/>
+                    <circle cx="16" cy="13" r="1" fill="currentColor"/>
+                    <path d="M9 12h6M12 9v6"/>
+                </svg>
+                <h3 data-it="Cookie e Privacy" data-de="Cookies und Datenschutz">Cookie e Privacy</h3>
+            </div>
+            <div class="initial-modal-body">
+                <p data-it="Questo sito utilizza cookie tecnici necessari per il funzionamento e migliora la tua esperienza. I dati vengono trattati secondo la nostra informativa privacy." data-de="Diese Website verwendet technische Cookies, die für das Funktionieren erforderlich sind und Ihre Erfahrung verbessern. Die Daten werden gemäß unserer Datenschutzerklärung verarbeitet.">Questo sito utilizza cookie tecnici necessari per il funzionamento e migliora la tua esperienza. I dati vengono trattati secondo la nostra informativa privacy.</p>
+                <p data-it="Proseguendo, accetti l'utilizzo dei cookie e l'informativa privacy." data-de="Mit dem Fortfahren akzeptieren Sie die Verwendung von Cookies und die Datenschutzerklärung.">Proseguendo, accetti l'utilizzo dei cookie e l'informativa privacy.</p>
+            </div>
+            <div class="initial-modal-actions">
+                <button class="btn-primary" onclick="acceptInitialGDPR()">
+                    <span data-it="Accetta e Continua" data-de="Akzeptieren und Fortfahren">Accetta e Continua</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <main class="main-container">
         <div class="form-card">

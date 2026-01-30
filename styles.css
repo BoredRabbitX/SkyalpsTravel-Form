@@ -217,10 +217,23 @@ body {
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
-.logo-area { 
-    display: flex; 
+.logo-area {
+    display: flex;
     align-items: center;
     gap: 16px;
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease;
+}
+
+.logo-link:hover {
+    opacity: 0.85;
 }
 
 .logo-icon {
@@ -1756,6 +1769,62 @@ input[type="range"]::-webkit-slider-thumb:hover {
     border-top-color: var(--primary);
     border-radius: 50%;
     animation: spin 1s linear infinite;
+}
+
+/* Initial GDPR Modal */
+.initial-modal {
+    max-width: 400px;
+    padding: 32px 28px;
+}
+
+.initial-modal-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.cookie-icon {
+    width: 56px;
+    height: 56px;
+    color: var(--accent);
+    margin-bottom: 12px;
+}
+
+.initial-modal-header h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0;
+}
+
+.initial-modal-body {
+    margin-bottom: 24px;
+}
+
+.initial-modal-body p {
+    font-size: 14px;
+    color: var(--gray-700);
+    line-height: 1.6;
+    margin: 0 0 12px 0;
+}
+
+.initial-modal-body p:last-child {
+    margin-bottom: 0;
+    color: var(--gray-600);
+    font-size: 13px;
+}
+
+.initial-modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.initial-modal-actions .btn-primary {
+    width: 100%;
+    padding: 14px 24px;
+    font-size: 15px;
 }
 
 @keyframes spin {

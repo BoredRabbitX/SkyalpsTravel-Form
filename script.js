@@ -93,6 +93,7 @@
         initNavigation();
         initPhoneInput();
         updateProgress();
+        initGDPRModal();
     });
 
     // ============================================
@@ -947,28 +948,48 @@
         var neonati = infants;
         
         var message = '*NUOVA RICHIESTA*\n';
-        message += 'Pratica: ' + num + '\n\n';
-        message += '*CLIENTE*\n';
+        message += '━━━━━━━━━━━━━━━━━━━━\n\n';
+        message += '📋 *PRATICA*\n';
+        message += num + '\n\n';
+        message += '👤 *CLIENTE*\n';
         message += nome + ' ' + cognome + '\n';
-        message += (d['entry.TELEFONO'] || '-') + '\n';
-        message += (d['entry.EMAIL'] || '-') + '\n\n';
-        message += '*VIAGGIO*\n';
-        message += dest + '\n';
-        message += 'Partenza: ' + (d['entry.DATA_PARTENZA'] || '-') + '\n';
-        message += 'Ritorno: ' + (d['entry.DATA_RITORNO'] || '-') + '\n';
-        message += 'Notti: ' + (d['entry.NOTTI'] || '-') + '\n\n';
-        message += '*VIAGGIATORI*\n';
+        message += '📞 ' + (d['entry.TELEFONO'] || '-') + '\n';
+        message += '📧 ' + (d['entry.EMAIL'] || '-') + '\n\n';
+        message += '✈️ *VIAGGIO*\n';
+        message += '📍 ' + dest + '\n';
+        message += '📅 Partenza: ' + (d['entry.DATA_PARTENZA'] || '-') + '\n';
+        message += '📅 Ritorno: ' + (d['entry.DATA_RITORNO'] || '-') + '\n';
+        message += '🌙 Notti: ' + (d['entry.NOTTI'] || '-') + '\n';
+        message += '💰 Budget: ' + (d['entry.BUDGET'] || '-') + '\n';
+        message += '🏨 Trattamento: ' + (d['entry.TRATTAMENTO'] || '-') + '\n';
+        message += '⭐ Stelle: ' + (d['entry.STELLE'] || '-') + '\n\n';
+        message += '👥 *VIAGGIATORI*\n';
         message += adulti + ' adulti';
         if (bambini > 0) message += ', ' + bambini + ' bambini';
         if (neonati > 0) message += ', ' + neonati + ' neonati';
-        message += '\n';
+        message += '\n\n';
         
         if (d['entry.MESSAGGIO']) {
-            message += '\n*NOTE*\n' + d['entry.MESSAGGIO'];
+            message += '📝 *NOTE*\n' + d['entry.MESSAGGIO'];
         }
         
         return encodeURIComponent(message);
     }
+
+    // ============================================
+    // GDPR INITIAL MODAL
+    // ============================================
+    function initGDPRModal() {
+        var gdprAccepted = localStorage.getItem('skyalps_gdpr_accepted');
+        if (!gdprAccepted) {
+            showModal('initialGDPRModal');
+        }
+    }
+
+    window.acceptInitialGDPR = function() {
+        localStorage.setItem('skyalps_gdpr_accepted', 'true');
+        hideModal('initialGDPRModal');
+    };
 
     // ============================================
     // GDPR MODAL
