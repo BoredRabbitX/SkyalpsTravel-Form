@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SkyAlps Travel - Richiesta Preventivo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/it.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/de.min.css">
+</head>
+<body>
+    <!-- Sfondo Animato -->
+    <div class="bg-animation">
+        <div class="mountains">
+            <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
+                <!-- Montagne stile Dolomiti - erose e frastagliate -->
+                <path fill="#0a5238" fill-opacity="0.5" d="M0,320 L0,200 L60,160 L100,220 L140,140 L200,280 L260,120 L320,240 L380,100 L440,260 L500,140 L560,220 L620,80 L680,280 L740,120 L800,240 L860,100 L920,260 L980,140 L1040,220 L1100,60 L1160,280 L1220,120 L1280,240 L1340,100 L1400,260 L1440,180 L1440,320 Z"/>
+            </svg>
+        </div>
+        <div class="mountains-back">
+            <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
+                <!-- Seconda fila più sfumata e lontana -->
+                <path fill="#052a1c" fill-opacity="0.6" d="M0,320 L0,240 L80,180 L140,280 L220,120 L300,300 L380,140 L460,280 L540,100 L620,300 L700,140 L780,280 L860,120 L940,300 L1020,140 L1100,280 L1180,100 L1260,300 L1340,140 L1440,260 L1440,320 Z"/>
+            </svg>
+        </div>
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+        <div class="waves">
+            <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path fill="rgba(212,165,116,0.1)" d="M0,60 C360,120 720,0 1080,60 C1260,90 1350,80 1440,60 L1440,120 L0,120 Z"></path>
+            </svg>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="logo-area">
+            <div class="logo-icon">
+                <img src="logo/logo-def-white.png" alt="SkyAlps Travel" class="logo-img">
+            </div>
+            <span class="header-subtitle" data-it="Portale richieste impegnative" data-de="Buchungsportal">Portale richieste impegnative</span>
+        </div>
+        <div class="lang-switch">
+            <button class="lang-btn active" data-lang="it" onclick="setLang('it')">IT</button>
+            <button class="lang-btn" data-lang="de" onclick="setLang('de')">DE</button>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="form-card">
+            <div class="form-header">
+                <h1 class="form-title" data-it="Richiedi il tuo preventivo" data-de="Fordern Sie Ihr Angebot an">Richiedi il tuo preventivo</h1>
+                <p class="form-subtitle" data-it="Compila il form in pochi passaggi" data-de="Füllen Sie das Formular in wenigen Schritten aus">Compila il form in pochi passaggi</p>
+            </div>
+
+            <div class="progress-line">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="prog-steps">
+                    <div class="prog-step active" data-step="1">
+                        <div class="step-icon">📍</div>
+                        <span class="step-label" data-it="Dove" data-de="Wo">Dove</span>
+                    </div>
+                    <div class="prog-step" data-step="2">
+                        <div class="step-icon">📅</div>
+                        <span class="step-label" data-it="Quando" data-de="Wann">Quando</span>
+                    </div>
+                    <div class="prog-step" data-step="3">
+                        <div class="step-icon">🏨</div>
+                        <span class="step-label" data-it="Hotel" data-de="Hotel">Hotel</span>
+                    </div>
+                    <div class="prog-step" data-step="4">
+                        <div class="step-icon">👥</div>
+                        <span class="step-label" data-it="Chi" data-de="Wer">Chi</span>
+                    </div>
+                    <div class="prog-step" data-step="5">
+                        <div class="step-icon">✉️</div>
+                        <span class="step-label" data-it="Invio" data-de="Senden">Invio</span>
+                    </div>
+                </div>
+            </div>
+
+            <form id="bookingForm">
+                <!-- STEP 1: Destinazione -->
+                <div class="step active" data-step="1">
+                    <div class="step-header">
+                        <h2 class="step-title" data-it="Dove vuoi andare?" data-de="Wohin möchtest du?">Dove vuoi andare?</h2>
+                        <p class="step-desc" data-it="Scegli la tua destinazione ideale" data-de="Wählen Sie Ihr ideales Reiseziel">Scegli la tua destinazione ideale</p>
+                    </div>
+                    
+                    <div class="field-group">
+                        <div class="field">
+                            <label data-it="Destinazione *" data-de="Reiseziel *">Destinazione *</label>
+                            <div class="select-wrapper">
+                                <select id="destination" name="entry.DESTINAZIONE" required>
+                                    <option value="" data-it="Seleziona destinazione" data-de="Reiseziel wählen">Seleziona destinazione</option>
+                                    <option value="CATANIA_SICILIA" data-it="Catania - Sicilia" data-de="Catania - Sizilien">Catania - Sicilia</option>
+                                    <option value="LAMEZIA_CALABRIA" data-it="Lamezia Terme - Calabria" data-de="Lamezia Terme - Kalabrien">Lamezia Terme - Calabria</option>
+                                    <option value="SALONICCO_GRECIA" data-it="Salonicco/Halkidiki - Grecia" data-de="Saloniki/Halkidiki - Griechenland">Salonicco/Halkidiki - Grecia</option>
+                                    <option value="PARVALIA_GRECIA" data-it="Preveza/Lefkada - Grecia" data-de="Preveza/Lefkada - Griechenland">Preveza/Lefkada - Grecia</option>
+                                    <option value="CORFU_GRECIA" data-it="Corfù - Grecia" data-de="Korfu - Griechenland">Corfù - Grecia</option>
+                                    <option value="CEFALONIA_GRECIA" data-it="Cefalonia - Grecia" data-de="Kefalonia - Griechenland">Cefalonia - Grecia</option>
+                                    <option value="OLBIA_SARDEGNA" data-it="Olbia - Sardegna" data-de="Olbia - Sardinien">Olbia - Sardegna</option>
+                                    <option value="CAGLIARI_SARDEGNA" data-it="Cagliari - Sardegna" data-de="Cagliari - Sardinien">Cagliari - Sardegna</option>
+                                    <option value="IBIZA_SPAAGNA" data-it="Ibiza - Spagna" data-de="Ibiza - Spanien">Ibiza - Spagna</option>
+                                    <option value="MINORCA_SPAAGNA" data-it="Minorca - Spagna" data-de="Menorca - Spanien">Minorca - Spagna</option>
+                                    <option value="BRAC_CROAZIA" data-it="Brac - Croazia" data-de="Brač - Kroatien">Brac - Croazia</option>
+                                    <option value="BRINDISI_PUGLIA" data-it="Brindisi - Puglia" data-de="Brindisi - Apulien">Brindisi - Puglia</option>
+                                    <option value="ALTRO" data-it="Altra destinazione" data-de="Anderes Reiseziel">Altra destinazione</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="field hidden" id="otherDestGroup">
+                            <label data-it="Quale destinazione? *" data-de="Welches Reiseziel? *">Quale destinazione? *</label>
+                            <input type="text" id="otherDest" name="entry.ALTRO_DESTINAZIONE" placeholder="Inserisci la destinazione desiderata">
+                        </div>
+                        
+                        <div class="field">
+                            <label data-it="Tipo di vacanza *" data-de="Urlaubsart *">Tipo di vacanza *</label>
+                            <div class="vacation-types">
+                                <label class="vacation-option">
+                                    <input type="radio" name="entry.TIPO_VACANZA" value="MARE" required>
+                                    <span class="vacation-card">
+                                        <span class="vacation-icon">🏖️</span>
+                                        <span class="vacation-label" data-it="Mare" data-de="Meer">Mare</span>
+                                    </span>
+                                </label>
+                                <label class="vacation-option">
+                                    <input type="radio" name="entry.TIPO_VACANZA" value="CITY">
+                                    <span class="vacation-card">
+                                        <span class="vacation-icon">🏙️</span>
+                                        <span class="vacation-label" data-it="City Break" data-de="Städtereise">City Break</span>
+                                    </span>
+                                </label>
+                                <label class="vacation-option">
+                                    <input type="radio" name="entry.TIPO_VACANZA" value="MONTAGNA">
+                                    <span class="vacation-card">
+                                        <span class="vacation-icon">🏔️</span>
+                                        <span class="vacation-label" data-it="Montagna" data-de="Berge">Montagna</span>
+                                    </span>
+                                </label>
+                                <label class="vacation-option">
+                                    <input type="radio" name="entry.TIPO_VACANZA" value="LAGHI">
+                                    <span class="vacation-card">
+                                        <span class="vacation-icon">🌊</span>
+                                        <span class="vacation-label" data-it="Laghi" data-de="Seen">Laghi</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-row">
+                        <button type="button" class="btn-next" data-next="2">
+                            <span data-it="Continua" data-de="Weiter">Continua</span>
+                            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Date e Preferenze -->
+                <div class="step" data-step="2">
+                    <div class="step-header">
+                        <h2 class="step-title" data-it="Date e Preferenze" data-de="Daten und Präferenzen">Date e Preferenze</h2>
+                        <p class="step-desc" data-it="Quando vuoi partire?" data-de="Wann möchten Sie abreisen?">Quando vuoi partire?</p>
+                    </div>
+                    
+                    <div class="field-group">
+                        <div class="row-2">
+                            <div class="field">
+                                <label data-it="Data partenza *" data-de="Abflugdatum *">Data partenza *</label>
+                                <div class="input-icon">
+                                    <span class="icon">📅</span>
+                                    <input type="text" id="departureDate" name="entry.DATA_PARTENZA" required placeholder="Seleziona data" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label data-it="Data ritorno *" data-de="Rückflugdatum *">Data ritorno *</label>
+                                <div class="input-icon">
+                                    <span class="icon">📅</span>
+                                    <input type="text" id="returnDate" name="entry.DATA_RITORNO" required placeholder="Seleziona data" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="field">
+                            <label data-it="Numero notti" data-de="Anzahl der Nächte">Numero notti</label>
+                            <div class="nights-display">
+                                <div class="counter nights-counter">
+                                    <button type="button" class="cnt-btn minus">−</button>
+                                    <div class="counter-info">
+                                        <span class="cnt-val" id="nights">7</span>
+                                        <span class="cnt-label" data-it="notti" data-de="Nächte">notti</span>
+                                    </div>
+                                    <button type="button" class="cnt-btn plus">+</button>
+                                </div>
+                            </div>
+                            <input type="hidden" name="entry.NOTTI" value="7">
+                        </div>
+                        
+                        <div class="field">
+                            <label data-it="Budget previsto" data-de="Geplantes Budget">Budget previsto</label>
+                            <div class="budget-container">
+                                <div class="budget-values">
+                                    <span>0 €</span>
+                                    <span class="budget-current"><span id="budgetVal">5.000</span> €</span>
+                                    <span>15.000 €</span>
+                                </div>
+                                <input type="range" id="budget" name="entry.BUDGET" min="0" max="15000" step="500" value="5000">
+                            </div>
+                        </div>
+                        
+                        <div class="field">
+                            <label data-it="Trattamento" data-de="Verpflegung">Trattamento</label>
+                            <div class="select-wrapper">
+                                <select name="entry.TRATTAMENTO">
+                                    <option value="" data-it="Seleziona trattamento" data-de="Verpflegung wählen">Seleziona trattamento</option>
+                                    <option value="SOLO_PERNOTTAMENTO" data-it="Solo pernottamento" data-de="Nur Übernachtung">Solo pernottamento</option>
+                                    <option value="BB" data-it="Bed & Breakfast" data-de="Frühstück">Bed & Breakfast</option>
+                                    <option value="MEZZA" data-it="Mezza pensione" data-de="Halbpension">Mezza pensione</option>
+                                    <option value="PIENA" data-it="Pensione completa" data-de="Vollpension">Pensione completa</option>
+                                    <option value="ALL" data-it="All inclusive" data-de="All inclusive">All inclusive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-row">
+                        <button type="button" class="btn-prev" data-prev="1">
+                            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+                            <span data-it="Indietro" data-de="Zurück">Indietro</span>
+                        </button>
+                        <button type="button" class="btn-next" data-next="3">
+                            <span data-it="Continua" data-de="Weiter">Continua</span>
+                            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Hotel e Servizi -->
+                <div class="step" data-step="3">
+                    <div class="step-header">
+                        <h2 class="step-title" data-it="Hotel e Servizi" data-de="Hotel und Dienstleistungen">Hotel e Servizi</h2>
+                        <p class="step-desc" data-it="Personalizza la tua esperienza" data-de="Personalisieren Sie Ihr Erlebnis">Personalizza la tua esperienza</p>
+                    </div>
+                    
+                    <div class="field-group">
+                        <div class="field">
+                            <label data-it="Categoria hotel" data-de="Hotelkategorie">Categoria hotel</label>
+                            <div class="star-rating" id="starRating">
+                                <label class="star-option">
+                                    <input type="radio" name="entry.STELLE" value="3">
+                                    <span class="star-card">⭐⭐⭐</span>
+                                </label>
+                                <label class="star-option">
+                                    <input type="radio" name="entry.STELLE" value="4">
+                                    <span class="star-card">⭐⭐⭐⭐</span>
+                                </label>
+                                <label class="star-option">
+                                    <input type="radio" name="entry.STELLE" value="5">
+                                    <span class="star-card">⭐⭐⭐⭐⭐</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="field">
+                            <label data-it="Tipologia struttura" data-de="Unterkunftstyp">Tipologia struttura</label>
+                            <div class="select-wrapper">
+                                <select name="entry.HOTEL">
+                                    <option value="" data-it="Seleziona" data-de="Wählen">Seleziona</option>
+                                    <option value="HOTEL" data-it="Hotel" data-de="Hotel">Hotel</option>
+                                    <option value="RESORT" data-it="Resort" data-de="Resort">Resort</option>
+                                    <option value="APPARTAMENTO" data-it="Appartamento" data-de="Apartment">Appartamento</option>
+                                    <option value="VILLA" data-it="Villa" data-de="Villa">Villa</option>
+                                    <option value="BNB" data-it="B&B" data-de="B&B">B&B</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="field">
+                            <label data-it="Spiaggia preferita" data-de="Bevorzugter Strand">Spiaggia preferita</label>
+                            <div class="beach-types">
+                                <label class="beach-option">
+                                    <input type="radio" name="entry.SPIAGGIA" value="SABBIA">
+                                    <span class="beach-card">
+                                        <span class="beach-icon">🏖️</span>
+                                        <span data-it="Sabbia" data-de="Sand">Sabbia</span>
+                                    </span>
+                                </label>
+                                <label class="beach-option">
+                                    <input type="radio" name="entry.SPIAGGIA" value="CIOTTOLI">
+                                    <span class="beach-card">
+                                        <span class="beach-icon">🪨</span>
+                                        <span data-it="Ciottoli" data-de="Kiesel">Ciottoli</span>
+                                    </span>
+                                </label>
+                                <label class="beach-option">
+                                    <input type="radio" name="entry.SPIAGGIA" value="SCOGLIERA">
+                                    <span class="beach-card">
+                                        <span class="beach-icon">🧗</span>
+                                        <span data-it="Scogliera" data-de="Felsen">Scogliera</span>
+                                    </span>
+                                </label>
+                                <label class="beach-option">
+                                    <input type="radio" name="entry.SPIAGGIA" value="MISTA">
+                                    <span class="beach-card">
+                                        <span class="beach-icon">🏝️</span>
+                                        <span data-it="Mista" data-de="Gemischt">Mista</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="field">
+                            <label data-it="Piscina" data-de="Pool">Piscina</label>
+                            <div class="pool-types">
+                                <label class="pool-option">
+                                    <input type="radio" name="entry.PISCINA" value="CON_PISCINA">
+                                    <span class="pool-card">
+                                        <span class="pool-icon">🏊</span>
+                                        <span data-it="Con piscina" data-de="Mit Pool">Con piscina</span>
+                                    </span>
+                                </label>
+                                <label class="pool-option">
+                                    <input type="radio" name="entry.PISCINA" value="SENZA_PISCINA">
+                                    <span class="pool-card">
+                                        <span class="pool-icon">🌊</span>
+                                        <span data-it="Solo mare" data-de="Nur Meer">Solo mare</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-row">
+                        <button type="button" class="btn-prev" data-prev="2">
+                            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+                            <span data-it="Indietro" data-de="Zurück">Indietro</span>
+                        </button>
+                        <button type="button" class="btn-next" data-next="4">
+                            <span data-it="Continua" data-de="Weiter">Continua</span>
+                            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 4: Viaggiatori -->
+                <div class="step" data-step="4">
+                    <div class="step-header">
+                        <h2 class="step-title" data-it="Chi viaggia?" data-de="Wer reist?">Chi viaggia?</h2>
+                        <p class="step-desc" data-it="Inserisci i dati dei viaggiatori" data-de="Geben Sie die Reisendendaten ein">Inserisci i dati dei viaggiatori</p>
+                    </div>
+                    
+                    <div class="travelers-container">
+                        <!-- Adulto Principale -->
+                        <div class="traveler-card compact">
+                            <div class="card-header-main">
+                                <div class="traveler-icon">👤</div>
+                                <div class="traveler-info">
+                                    <span class="traveler-role" data-it="Adulto principale" data-de="Hauptperson">Adulto principale</span>
+                                    <span class="traveler-required" data-it="* Obbligatorio" data-de="* Erforderlich">* Obbligatorio</span>
+                                </div>
+                            </div>
+                            <div class="card-fields">
+                                <div class="field-row">
+                                    <div class="field compact">
+                                        <input type="text" name="entry.V1_NOME" placeholder="Nome *" required>
+                                    </div>
+                                    <div class="field compact">
+                                        <input type="text" name="entry.V1_COGNOME" placeholder="Cognome *" required>
+                                    </div>
+                                </div>
+                                <div class="field compact full">
+                                    <input type="text" class="date-input" name="entry.V1_NASCITA" placeholder="Data di nascita * (gg/mm/aaaa)" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Secondo Adulto (Collapsible) -->
+                        <div class="traveler-card compact collapsible" id="secondAdultCard">
+                            <div class="card-header-expand" onclick="toggleCard(this)">
+                                <div class="expand-left">
+                                    <span class="traveler-num">2</span>
+                                    <span class="traveler-label" data-it="Secondo viaggiatore" data-de="Zweite Reisende">Secondo viaggiatore</span>
+                                </div>
+                                <button type="button" class="remove-traveler" id="removeAdult" onclick="event.stopPropagation()">✕</button>
+                            </div>
+                            <div class="card-fields">
+                                <div class="field-row">
+                                    <div class="field compact">
+                                        <input type="text" name="entry.V2_NOME" placeholder="Nome">
+                                    </div>
+                                    <div class="field compact">
+                                        <input type="text" name="entry.V2_COGNOME" placeholder="Cognome">
+                                    </div>
+                                </div>
+                                <div class="field compact full">
+                                    <input type="text" class="date-input" name="entry.V2_NASCITA" placeholder="Data di nascita (gg/mm/aaaa)">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Terzo Adulto (Collapsible) -->
+                        <div class="traveler-card compact collapsible hidden" id="thirdAdultCard">
+                            <div class="card-header-expand" onclick="toggleCard(this)">
+                                <div class="expand-left">
+                                    <span class="traveler-num">3</span>
+                                    <span class="traveler-label" data-it="Terzo viaggiatore" data-de="Dritte Reisende">Terzo viaggiatore</span>
+                                </div>
+                                <button type="button" class="remove-traveler" id="removeAdult3" onclick="event.stopPropagation()">✕</button>
+                            </div>
+                            <div class="card-fields">
+                                <div class="field-row">
+                                    <div class="field compact">
+                                        <input type="text" name="entry.V3_NOME" placeholder="Nome">
+                                    </div>
+                                    <div class="field compact">
+                                        <input type="text" name="entry.V3_COGNOME" placeholder="Cognome">
+                                    </div>
+                                </div>
+                                <div class="field compact full">
+                                    <input type="text" class="date-input" name="entry.V3_NASCITA" placeholder="Data di nascita (gg/mm/aaaa)">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quarto Adulto (Collapsible) -->
+                        <div class="traveler-card compact collapsible hidden" id="fourthAdultCard">
+                            <div class="card-header-expand" onclick="toggleCard(this)">
+                                <div class="expand-left">
+                                    <span class="traveler-num">4</span>
+                                    <span class="traveler-label" data-it="Quarto viaggiatore" data-de="Vierte Reisende">Quarto viaggiatore</span>
+                                </div>
+                                <button type="button" class="remove-traveler" id="removeAdult4" onclick="event.stopPropagation()">✕</button>
+                            </div>
+                            <div class="card-fields">
+                                <div class="field-row">
+                                    <div class="field compact">
+                                        <input type="text" name="entry.V4_NOME" placeholder="Nome">
+                                    </div>
+                                    <div class="field compact">
+                                        <input type="text" name="entry.V4_COGNOME" placeholder="Cognome">
+                                    </div>
+                                </div>
+                                <div class="field compact full">
+                                    <input type="text" class="date-input" name="entry.V4_NASCITA" placeholder="Data di nascita (gg/mm/aaaa)">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="add-buttons-row">
+                            <button type="button" class="add-btn-mini" id="addAdult">
+                                <span>+</span> <span data-it="Aggiungi adulto" data-de="+ Erwachsener">Aggiungi adulto</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Bambini -->
+                        <div class="traveler-section compact">
+                            <div class="section-header-compact">
+                                <span class="section-icon">👶</span>
+                                <span class="section-label" data-it="Bambini (2-12 anni)" data-de="Kinder (2-12 Jahre)">Bambini (2-12 anni)</span>
+                                <div class="counter-mini">
+                                    <button type="button" class="cnt-btn-mini minus" id="childMinus">−</button>
+                                    <span class="cnt-val-mini" id="children">0</span>
+                                    <button type="button" class="cnt-btn-mini plus" id="childPlus">+</button>
+                                </div>
+                            </div>
+                            <div class="extra-travelers" id="childrenFields"></div>
+                        </div>
+                        
+                        <!-- Neonati -->
+                        <div class="traveler-section compact">
+                            <div class="section-header-compact">
+                                <span class="section-icon">🍼</span>
+                                <span class="section-label" data-it="Neonati (0-2 anni)" data-de="Kleinkinder (0-2 Jahre)">Neonati (0-2 anni)</span>
+                                <div class="counter-mini">
+                                    <button type="button" class="cnt-btn-mini minus" id="infantMinus">−</button>
+                                    <span class="cnt-val-mini" id="infants">0</span>
+                                    <button type="button" class="cnt-btn-mini plus" id="infantPlus">+</button>
+                                </div>
+                            </div>
+                            <div class="extra-travelers" id="infantsFields"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Campi nascosti per NUM_BAMBINI e NUM_NEONATI -->
+                    <input type="hidden" name="entry.NUM_BAMBINI" value="">
+                    <input type="hidden" name="entry.NUM_NEONATI" value="">
+
+                    <div class="btn-row">
+                        <button type="button" class="btn-prev" data-prev="3">
+                            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+                            <span data-it="Indietro" data-de="Zurück">Indietro</span>
+                        </button>
+                        <button type="button" class="btn-next" data-next="5">
+                            <span data-it="Continua" data-de="Weiter">Continua</span>
+                            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 5: Dati Contatto e Invio -->
+                <div class="step" data-step="5">
+                    <div class="step-header">
+                        <h2 class="step-title" data-it="I tuoi dati" data-de="Ihre Daten">I tuoi dati</h2>
+                        <p class="step-desc" data-it="Completa con i tuoi contatti" data-de="Vervollständigen Sie mit Ihren Kontaktdaten">Completa con i tuoi contatti</p>
+                    </div>
+                    
+                    <div class="contact-container">
+                        <div class="contact-card">
+                            <div class="contact-header">
+                                <div class="contact-icon">📋</div>
+                                <div class="contact-title">
+                                    <span class="contact-label" data-it="Intestatario prenotazione" data-de="Buchungsinhaber">Intestatario prenotazione</span>
+                                    <span class="contact-sublabel" data-it="* Campi obbligatori" data-de="* Pflichtfelder">* Campi obbligatori</span>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-fields">
+                                <div class="field-row">
+                                    <div class="field compact">
+                                        <label data-it="Nome" data-de="Vorname">Nome</label>
+                                        <input type="text" name="entry.NOME" required>
+                                    </div>
+                                    <div class="field compact">
+                                        <label data-it="Cognome" data-de="Nachname">Cognome</label>
+                                        <input type="text" name="entry.COGNOME" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="field-row">
+                                    <div class="field compact">
+                                        <label data-it="Data di nascita" data-de="Geburtsdatum">Data di nascita</label>
+                                        <input type="text" class="date-input" name="entry.NASCITA_INTEST" required>
+                                    </div>
+                                    <div class="field compact">
+                                        <label data-it="Luogo di nascita" data-de="Geburtsort">Luogo di nascita</label>
+                                        <input type="text" name="entry.LUOGO_NASCITA" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="field-row">
+                                    <div class="field compact">
+                                        <label data-it="Codice Fiscale" data-de="Steuernummer">Codice Fiscale</label>
+                                        <input type="text" name="entry.CF" required>
+                                    </div>
+                                    <div class="field compact">
+                                        <label data-it="Email" data-de="E-Mail">Email</label>
+                                        <input type="email" name="entry.EMAIL" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="field compact full">
+                                    <label data-it="Telefono" data-de="Telefon">Telefono</label>
+                                    <div class="phone-input-wrapper">
+                                        <select class="phone-prefix" name="entry.TELEFONO_PREFIX" id="phonePrefix">
+                                            <option value="+39" selected>+39</option>
+                                            <option value="+49">+49</option>
+                                            <option value="+43">+43</option>
+                                            <option value="+41">+41</option>
+                                            <option value="+33">+33</option>
+                                            <option value="+34">+34</option>
+                                            <option value="+44">+44</option>
+                                            <option value="+31">+31</option>
+                                            <option value="+32">+32</option>
+                                            <option value="+45">+45</option>
+                                            <option value="+46">+46</option>
+                                            <option value="+47">+47</option>
+                                            <option value="+48">+48</option>
+                                            <option value="+30">+30</option>
+                                            <option value="other">Altro</option>
+                                        </select>
+                                        <input type="tel" name="entry.TELEFONO" id="phoneNumber" placeholder="3xx xxx xxxx" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="message-section">
+                            <div class="field compact full">
+                                <label data-it="Note aggiuntive (opzionale)" data-de="Zusätzliche Hinweise (optional)">Note aggiuntive (opzionale)</label>
+                                <textarea name="entry.MESSAGGIO" rows="2" placeholder="Richieste particolari, esigenze alimentari, ecc..." data-it-placeholder="Richieste particolari, esigenze alimentari, ecc..." data-de-placeholder="Besondere Wünsche, Ernährungsbedürfnisse usw..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="privacy-section">
+                            <label class="privacy-check-compact">
+                                <input type="checkbox" name="entry.PRIVACY" required>
+                                <span class="check-box"></span>
+                                <span class="privacy-text" data-it="Ho letto e accetto la privacy policy *" data-de="Ich habe die Datenschutzerklärung gelesen und akzeptiere sie *">Ho letto e accetto la privacy policy *</span>
+                            </label>
+                        </div>
+                        
+                        <div class="summary-mini" id="summaryBox">
+                            <div class="summary-header" onclick="toggleSummary()">
+                                <span data-it="📋 Riepilogo richiesta" data-de="📋 Anfrageübersicht">📋 Riepilogo richiesta</span>
+                                <span class="summary-toggle">▼</span>
+                            </div>
+                            <div class="summary-content" id="summaryContent">
+                                <!-- Popolato da JS -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-row">
+                        <button type="button" class="btn-prev" data-prev="4">
+                            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+                            <span data-it="Modifica" data-de="Ändern">Modifica</span>
+                        </button>
+                        <button type="submit" class="btn-submit">
+                            <svg class="btn-icon" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                            <span data-it="Invia richiesta" data-de="Anfrage senden">Invia richiesta</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2026 SkyAlps Travel - <a href="https://www.skyalpstravel.com" target="_blank">www.skyalpstravel.com</a></p>
+        </div>
+    </footer>
+
+    <!-- Modal Professionali -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+    
+    <div class="modal" id="loadingModal">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <div class="spinner-loader"></div>
+            </div>
+            <h3 class="modal-title" data-it="Invio in corso..." data-de="Wird gesendet...">Invio in corso...</h3>
+            <p class="modal-text" data-it="Stiamo elaborando la tua richiesta" data-de="Wir verarbeiten Ihre Anfrage">Stiamo elaborando la tua richiesta</p>
+            <div class="progress-dots">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <svg viewBox="0 0 60 60" class="checkmark">
+                    <circle cx="30" cy="30" r="28" fill="none" stroke="#10b981" stroke-width="3"/>
+                    <path d="M18 30l8 8 16-16" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h3 class="modal-title" data-it="Richiesta inviata!" data-de="Anfrage gesendet!">Richiesta inviata!</h3>
+            <p class="modal-text" data-it="Grazie per la tua richiesta. Ti contatteremo presto." data-de="Vielen Dank für Ihre Anfrage. Wir werden uns bald bei Ihnen melden.">Grazie per la tua richiesta. Ti contatteremo presto.</p>
+            <div class="pratica-num" id="praticaNum"></div>
+            <div class="modal-actions">
+                <button class="btn-modal" onclick="closeModal('successModal'); resetForm();">
+                    <span data-it="Nuova richiesta" data-de="Neue Anfrage">Nuova richiesta</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="errorModal">
+        <div class="modal-content">
+            <div class="modal-icon error">
+                <svg viewBox="0 0 60 60">
+                    <circle cx="30" cy="30" r="28" fill="none" stroke="#ef4444" stroke-width="3"/>
+                    <path d="M20 20l20 20M40 20l-20 20" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h3 class="modal-title" data-it="Errore" data-de="Fehler">Errore</h3>
+            <p class="modal-text" id="errorText" data-it="Si è verificato un errore. Riprova." data-de="Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.">Si è verificato un errore. Riprova.</p>
+            <div class="modal-actions">
+                <button class="btn-modal secondary" onclick="closeModal('errorModal')">
+                    <span data-it="Chiudi" data-de="Schließen">Chiudi</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="script.js"></script>
+</body>
+</html>
