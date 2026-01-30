@@ -90,6 +90,7 @@
         initVacationTypes();
         initStarRating();
         loadData();
+        loadDatesFromStorage();
         initNavigation();
         initPhoneInput();
         updateProgress();
@@ -354,6 +355,7 @@
             var rd = new Date(departureDate);
             rd.setDate(rd.getDate() + nights);
             returnPicker.setDate(rd);
+            returnPicker.set('minDate', departureDate);
         }
     }
 
@@ -374,6 +376,39 @@
         }
     }
 
+    function loadDatesFromStorage() {
+        var saved = localStorage.getItem(CONFIG.STORAGE_KEY);
+        if (!saved) return;
+        
+        try {
+            var data = JSON.parse(saved);
+            var depValue = data['entry.DATA_PARTENZA'];
+            var retValue = data['entry.DATA_RITORNO'];
+            var destValue = data['entry.DESTINAZIONE'];
+            
+            // Aggiorna restrizioni datepicker in base alla destinazione
+            if (destValue) {
+                updateDatePickerRestrictions(destValue);
+            }
+            
+            if (depValue && typeof flatpickr !== 'undefined') {
+                var dp = flatpickr('#departureDate');
+                if (dp) {
+                    dp.setDate(depValue);
+                }
+            }
+            
+            if (retValue && typeof flatpickr !== 'undefined') {
+                var rp = flatpickr('#returnDate');
+                if (rp) {
+                    rp.setDate(retValue);
+                }
+            }
+        } catch (e) {
+            console.error('Errore nel caricamento date:', e);
+        }
+    }
+
     // ============================================
     // COUNTERS
     // ============================================
@@ -381,13 +416,22 @@
         // Notti
         document.querySelectorAll('.nights-counter .cnt-btn').forEach(function(btn) {
             btn.addEventListener('click', function() {
-                if (this.classList.contains('minus') && nights > 1) nights--;
-                else if (this.classList.contains('plus') && nights < 30) nights++;
+                var min = window.nightsMin || 1;
+                var max = window.nightsMax || 30;
+                
+                if (this.classList.contains('minus') && nights > min) nights--;
+                else if (this.classList.contains('plus') && nights < max) nights++;
                 
                 document.getElementById('nights').textContent = nights;
                 document.querySelector('[name="entry.NOTTI"]').value = nights;
                 
                 saveData();
+                
+                // Aggiorna stato bottoni
+                var minusBtn = document.querySelector('.nights-counter .minus');
+                var plusBtn = document.querySelector('.nights-counter .plus');
+                if (minusBtn) minusBtn.disabled = nights <= min;
+                if (plusBtn) plusBtn.disabled = nights >= max;
                 
                 if (typeof flatpickr !== 'undefined') {
                     var dp = flatpickr('#departureDate');
@@ -706,6 +750,213 @@
     // ============================================
     // DESTINATION
     // ============================================
+    // DESTINATION FLIGHT RESTRICTIONS
+    // ============================================
+    var FLIGHT_RESTRICTIONS = {
+        'LAMEZIA_CALABRIA': {
+            days: [2, 4, 6], // Martedì, Giovedì, Sabato (1=lunedì)
+            startDate: '2026-05-26',
+            endDate: '2026-09-26'
+        },
+        'CAGLIARI_SARDEGNA': {
+            days: [3, 5, 6, 7], // Mercoledì, Venerdì, Sabato, Domenica
+            startDate: '2026-05-20',
+            endDate: '2026-10-10'
+        },
+        'BRINDISI_PUGLIA': {
+            days: [3, 6, 7], // Mercoledì, Sabato, Domenica
+            startDate: '2026-05-20',
+            endDate: '2026-09-26'
+        },
+        'IBIZA_SPAAGNA': {
+            days: [2, 4, 7], // Martedì, Giovedì, Domenica
+            startDate: '2026-06-02',
+            endDate: '2026-10-01'
+        },
+        'OLBIA_SARDEGNA': {
+            days: [5, 6, 7], // Venerdì, Sabato, Domenica
+            startDate: '2026-05-22',
+            endDate: '2026-10-11'
+        },
+        'CORFU_GRECIA': {
+            days: [2, 5], // Martedì, Venerdì
+            startDate: '2026-05-29',
+            endDate: '2026-09-25'
+        },
+        'CATANIA_SICILIA': {
+            days: [3, 7], // Mercoledì, Domenica
+            startDate: '2026-05-20',
+            endDate: '2026-09-27'
+        },
+        'CEFALONIA_GRECIA': {
+            days: [5], // Venerdì
+            startDate: '2026-05-29',
+            endDate: '2026-09-25'
+        },
+        'MINORCA_SPAAGNA': {
+            days: [2, 5], // Martedì, Venerdì
+            startDate: '2026-05-29',
+            endDate: '2026-09-25'
+        },
+        'BRAC_CROAZIA': {
+            days: [5], // Venerdì
+            startDate: '2026-06-12',
+            endDate: '2026-09-11'
+        },
+        'SALONICCO_GRECIA': {
+            days: [5], // Venerdì
+            startDate: '2026-05-29',
+            endDate: '2026-09-25'
+        }
+    };
+
+    function getAllowedDepartureDates(startDate, endDate, allowedDays) {
+        if (typeof flatpickr === 'undefined') return startDate;
+        
+        var dates = [];
+        var current = new Date(startDate);
+        var end = new Date(endDate);
+        
+        while (current <= end) {
+            var dayOfWeek = current.getDay();
+            // Converti: 1=lunedì -> dayOfWeek (0=domenica)
+            // Quindi se allowedDays contiene 1 (lunedì), dayOfWeek deve essere 1
+            if (allowedDays.includes(dayOfWeek === 0 ? 7 : dayOfWeek)) {
+                dates.push(current.toISOString().split('T')[0]);
+            }
+            current.setDate(current.getDate() + 1);
+        }
+        
+        return dates;
+    }
+
+    function getReturnDatesForDeparture(departureDate, startDate, endDate, allowedDays) {
+        var returnDates = [];
+        var dep = new Date(departureDate);
+        var start = new Date(startDate);
+        var end = new Date(endDate);
+        
+        // Aggiungi notti minime (7) e massime (21 per default)
+        for (var nights = 7; nights <= 21; nights++) {
+            var ret = new Date(dep);
+            ret.setDate(ret.getDate() + nights);
+            
+            if (ret > end) break;
+            
+            // Verifica se la data di ritorno è un giorno di volo valido
+            var dayOfWeek = ret.getDay();
+            if (allowedDays.includes(dayOfWeek === 0 ? 7 : dayOfWeek)) {
+                returnDates.push(nights);
+            }
+        }
+        
+        return returnDates;
+    }
+
+    function calculateMinMaxNights(startDate, endDate, allowedDays) {
+        var minNights = 7;
+        var maxNights = 7;
+        
+        var dep = new Date(startDate);
+        var end = new Date(endDate);
+        var foundMax = false;
+        
+        while (dep <= end) {
+            var dayOfWeek = dep.getDay();
+            if (allowedDays.includes(dayOfWeek === 0 ? 7 : dayOfWeek)) {
+                var possibleNights = getReturnDatesForDeparture(dep, startDate, endDate, allowedDays);
+                if (possibleNights.length > 0) {
+                    maxNights = Math.max(maxNights, Math.max.apply(null, possibleNights));
+                    foundMax = true;
+                }
+            }
+            dep.setDate(dep.getDate() + 1);
+        }
+        
+        return { min: minNights, max: foundMax ? maxNights : 14 };
+    }
+
+    function updateDatePickerRestrictions(destination) {
+        if (typeof flatpickr === 'undefined') return;
+        
+        var restriction = FLIGHT_RESTRICTIONS[destination];
+        var dp = flatpickr('#departureDate');
+        
+        if (dp && restriction) {
+            // Ottieni le date disponibili
+            var allowedDates = getAllowedDepartureDates(
+                restriction.startDate,
+                restriction.endDate,
+                restriction.days
+            );
+            
+            // Imposta le restrizioni
+            dp.set('minDate', restriction.startDate);
+            dp.set('maxDate', restriction.endDate);
+            dp.set('enable', allowedDates);
+            
+            // Calcola notti minime e massime
+            var nightRange = calculateMinMaxNights(
+                restriction.startDate,
+                restriction.endDate,
+                restriction.days
+            );
+            
+            // Aggiorna il contatore delle notti
+            updateNightsCounter(nightRange.min, nightRange.max);
+            
+            // Se la data attuale non è valida, resetta
+            if (dp.selectedDates.length > 0) {
+                var selected = dp.selectedDates[0];
+                var selectedStr = selected.toISOString().split('T')[0];
+                if (!allowedDates.includes(selectedStr)) {
+                    dp.clear();
+                }
+            }
+        } else if (dp) {
+            // Se non ci sono restrizioni, mostra tutte le date nel range
+            var today = new Date();
+            var mayThisYear = new Date(today.getFullYear(), 4, 1);
+            var startDate = (today.getMonth() >= 4) ? mayThisYear : new Date(today.getFullYear(), 4, 1);
+            var nextYear = new Date(today);
+            nextYear.setFullYear(nextYear.getFullYear() + 1);
+            
+            dp.set('minDate', startDate);
+            dp.set('maxDate', nextYear);
+            dp.set('enable', []); // Rimuovi restrizioni
+            
+            // Notte illimitate (1-30)
+            updateNightsCounter(1, 30);
+        }
+    }
+
+    function updateNightsCounter(min, max) {
+        // Aggiorna le variabili globali
+        if (nights < min) nights = min;
+        if (nights > max) nights = max;
+        
+        // Aggiorna la visualizzazione
+        document.getElementById('nights').textContent = nights;
+        document.querySelector('[name="entry.NOTTI"]').value = nights;
+        
+        // Aggiorna i bottoni del contatore
+        var minusBtn = document.querySelector('.nights-counter .minus');
+        var plusBtn = document.querySelector('.nights-counter .plus');
+        
+        if (minusBtn) {
+            minusBtn.disabled = nights <= min;
+        }
+        if (plusBtn) {
+            plusBtn.disabled = nights >= max;
+        }
+        
+        // Salva le nuove restrizioni per uso futuro
+        window.nightsMin = min;
+        window.nightsMax = max;
+        
+        saveData();
+    }
+
     function initDestination() {
         var destSelect = document.getElementById('destination');
         if (!destSelect) return;
@@ -724,6 +975,10 @@
                     otherInput.value = '';
                 }
             }
+            
+            // Aggiorna restrizioni datepicker
+            updateDatePickerRestrictions(this.value);
+            
             saveData();
         });
     }

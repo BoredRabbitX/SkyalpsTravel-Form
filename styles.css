@@ -769,6 +769,14 @@ body {
     transform: scale(0.95);
 }
 
+.cnt-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: transparent;
+    color: var(--gray-500);
+    transform: none;
+}
+
 .counter-info {
     display: flex;
     flex-direction: column;
@@ -2000,12 +2008,16 @@ input[type="range"]::-webkit-slider-thumb:hover {
     }
     
     .main-container {
-        padding: 70px 12px 80px 12px;
+        padding: 60px 8px 70px 8px;
+        align-items: flex-start;
     }
 
-    .form-card { 
+    .form-card {
         border-radius: var(--radius-lg);
+        max-width: 100%;
+        box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
     }
+
     
     .form-header {
         padding: 24px 20px;

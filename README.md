@@ -13,8 +13,8 @@
 Questo portale permette di raccogliere richieste di preventivo per viaggi SkyAlps.
 
 **Il form è già collegato al tuo Google Sheet!**
-- Google Form: `1FAIpQLSeEQmM8kIO-UVDvO9OUBEv9_8Lcets94kmsdAtjNseHOb10xQ`
-- Google Sheet: https://docs.google.com/spreadsheets/d/1du8ugOhXS75E2YcjbPQ-BAkp-h7oAkIBPBhf63RqaqM
+- Google Form: [COLLEGATO AL SISTEMA]
+- Google Sheet: [COLLEGATO AL SISTEMA]
 
 ---
 
@@ -53,7 +53,7 @@ skyalps-portal/
    - Apri il Google Form
    - Clicca su "Risposte"
    - Clicca su "Collega a Fogli"
-   - Seleziona il foglio "1du8ugOhXS75E2YcjbPQ-BAkp-h7oAkIBPBhf63RqaqM"
+   - Seleziona il foglio corretto (configurazione nel file script.js)
 
 2. Apri la Console del browser (F12) per vedere eventuali errori
 
